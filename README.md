@@ -1,1 +1,0 @@
-# privacy-policy-of-The-Guess-Game
