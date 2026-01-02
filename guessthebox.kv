@@ -1,0 +1,136 @@
+FloatLayout:
+    ScreenManager:
+        id: sm
+        MenuScreen:
+        GameScreen:
+
+    MDIconButton:
+        id:mute
+        icon:"volume-high"
+        theme_icon_color: "Custom"
+        icon_color: 1, 1, 1, 1
+        pos_hint:{"center_x":.9,"center_y":.9}
+        on_release:
+            app.bg.stop()
+            root.ids.unmute.disabled=False
+            root.ids.unmute.opacity=1
+            self.opacity=0
+            self.disabled=True
+
+    MDIconButton:
+        id:unmute
+        icon:"volume-mute"
+        pos_hint:{"center_x":.9,"center_y":.9}
+        on_release:
+            root.ids.mute.disabled=False
+            root.ids.mute.opacity=1
+            app.start_bg()
+            self.opacity=0
+            self.disabled=True
+            
+<MenuScreen>:
+    name:'Menu'
+
+    FitImage:
+        source: "menu_bg.png"
+
+    MDFillRoundFlatButton:
+        text:'Start'
+        size_hint:.4,.1
+        pos_hint:{'center_x':.5,'center_y':.5}
+        on_press:
+            root.manager.current='Game'
+            root.manager.transition.direction="left"
+            root.play_start_sound()
+
+<GameScreen>:
+    name:'Game'
+
+    FloatLayout:
+        id:layout
+
+        FitImage:
+            source:"game_bg.png"
+        
+        MDIconButton:
+            id:back
+            icon:"arrow-left-bold"
+            theme_icon_color: "Custom"
+            icon_color: 0, 0, 0, 1
+            pos_hint:{"center_x":.1,"center_y":.9}
+            on_press:
+                root.play_back_sound()
+                root.manager.current='Menu'
+                root.manager.transition.direction="right"
+                root.cancel_restart()
+                
+        MDLabel:
+            halign:"center"
+            text:"Choose a Box"
+            font_size:"50sp"
+            theme_text_color:"Custom"
+            text_color:0,0,0,1
+            pos_hint:{"center_y":.84}
+        
+        MDLabel:
+            halign:"center"
+            text:"Work In Progress"
+            font_size:"25sp"
+            theme_text_color:"Custom"
+            text_color:1,0,0,1
+            pos_hint:{"center_x":.52,"center_y":.04}
+
+        MDIcon:
+            id:cup
+            icon:"trophy"
+            font_size: "70sp"
+            opacity: 0
+            pos_hint: {"center_x": .5, "center_y": .54}
+
+        MDIconButton:
+            id:box1
+            icon:"gift"
+            theme_icon_color: "Custom"
+            icon_color: 1, 0, 0, 1
+            icon_size: "90sp"
+            pos_hint:{"center_x":.2,"center_y":.55}
+            on_release:
+                self.disabled = True
+                root.fade(box2,box3)
+                root.unfade(cup)
+                root.clock_restart(root.dialog_call)
+                self.opacity=0
+                root.play_box_sound()
+                root.check_box_select(.2)
+                   
+        MDIconButton:
+            id:box2
+            icon:"gift"
+            theme_icon_color: "Custom"
+            icon_color: 0, 1,0, 1
+            icon_size: "90sp"
+            pos_hint:{"center_x":.5,"center_y":.55}
+            on_release:
+                self.disabled = True
+                root.fade(box1,box3)
+                root.unfade(cup)
+                root.clock_restart(root.dialog_call)
+                self.opacity=0
+                root.play_box_sound()
+                root.check_box_select(.5)
+
+        MDIconButton:
+            id:box3
+            icon:"gift"
+            icon_size: "90sp"
+            theme_icon_color: "Custom"
+            icon_color: 0, 0, 1, 1
+            pos_hint:{"center_x":.8,"center_y":.55}
+            on_release:
+                self.disabled = True
+                root.fade(box1,box2)
+                root.unfade(cup)
+                root.clock_restart(root.dialog_call)
+                self.opacity=0
+                root.play_box_sound()
+                root.check_box_select(.8)
